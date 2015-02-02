@@ -7,7 +7,7 @@ function resolve() {
 	for i in $a; do ipset add blacklist $i &> /dev/null; done
 };
 
-ipset add blacklist $i &> /dev/null
+ipset list blacklist &> /dev/null
 
 if [ $? -ne 0 ]
 then

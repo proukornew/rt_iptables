@@ -1,5 +1,11 @@
 #!/bin/bash
-# rt dpi(ip+resorlved ips from dns)
+# rt dpi(ip+resolved ips from dns)
+# FIXME
+# opkg install libidn
+# opkg install dig
+# opkg install coreutils-sleep
+# opkg install iconv
+#
 # -A PREROUTING -p tcp -m tcp --sport 80 -m string --string "http://95.167.13.50/?st" --algo bm --from 89 --to 90 -j DROP
 function resolve() {
 	# include @dns.server
@@ -19,7 +25,7 @@ then
 fi
 
 echo "start"
-rkn=`curl -s "https://raw.githubusercontent.com/zapret-info/z-i/master/dump.csv"`
+rkn=`curl -s "https://raw.githubusercontent.com/zapret-info/z-i/master/dump.csv" | iconv -f cp1251 | tail -n+2 | idn -u`
 ips=`echo "$rkn" | cut -d ";" -s -f1 | tr -s " | " "\n" | sort | uniq`
 ipset flush blacklist
 for i in $ips; do ipset add blacklist $i; done

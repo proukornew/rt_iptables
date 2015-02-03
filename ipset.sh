@@ -9,8 +9,7 @@
 # -A PREROUTING -p tcp -m tcp --sport 80 -m string --string "http://95.167.13.50/?st" --algo bm --from 89 --to 90 -j DROP
 function resolve() {
 	# include @dns.server
-	a=`dig +short $1 a`
-	for i in $a; do ipset add blacklist $i &> /dev/null; done
+	for i in `dig +short $1 a`; do ipset add blacklist $i &> /dev/null; done
 };
 
 ipset list blacklist &> /dev/null

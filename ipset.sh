@@ -1,11 +1,25 @@
 #!/bin/bash
-# rt dpi(ip+resolved ips from dns)
-# FIXME
+# rt dpi(ips from list+resolved ips from dns)
+# РТ блокирует хосты на своих dns резолверах. Используйте свой резолвер или любой другой.
+# РТ dpi использует ip адреса из списка РКН + резолвит адреса хостов из dns.
+# Не забывайте про список минюста.
+# Также dpi работает для всех сетей различных CDN (тк нет смысла резолвить часто меняющийся адрес)
+# РТ блокирует некоторые хосты не из списка. Например: mega-porno.ru
+# Эти правила подходят для dpi РТ. Но есть вышестоящие провайдеры (аплинки),
+# которые могут блокировать трафик. Периодически были замечены dpi Beeline, МТС.
+# Похоже, что лучше использовать только два правила iptables без ipset. Они идут после строки
+# 5&0ff=58 -- change to your spoof isp's ttl or delete it
+# Выставьте в правилах правильный TTL, он соответствует количеству хопов до DPI РТ
+#
+# NOTE use only 2 iptables rules with properly TTL value.
 # opkg install libidn
 # opkg install dig
 # opkg install coreutils-sleep
 # opkg install iconv
+# opkg install ipset
+# opkg install curl
 #
+# Версия с использованием строки
 # -A PREROUTING -p tcp -m tcp --sport 80 -m string --string "http://95.167.13.50/?st" --algo bm --from 89 --to 90 -j DROP
 function resolve() {
 	# include @dns.server
